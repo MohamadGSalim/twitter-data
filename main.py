@@ -94,50 +94,65 @@ with open("json_list.json", "a") as f3:
 
 
 
-#parse tweets save in Json file and save in a DB
-for tweet in tweets:
 
-    #save each tweet in Json File
-    with open("json_tweets_list.json", "a") as f1:
-        f1.write(",\n")
-        json.dump(tweet, f1)
+def handle_tweets(tweets):
 
-    #parse Tweet
-    tweet_id = tweet['id']
-    tweet_text = tweet['text']
+    try:
+        f1 = open("json_tweets_list.json", "a")
 
+        #parse tweets save in Json file and save in a DB
+        for tweet in tweets:
 
-    #save in Database
-    sql_query = "INSERT IGNORE  INTO tweets (tweet_id, tweet_text) VALUES (%s, %s)"
-    values = (tweet_id, tweet_text)
+            #save each tweet in Json File
+            f1.write(",\n")
+            json.dump(tweet, f1)
 
-    mycursor.execute(sql_query, values)
-    conn.commit()
+            #parse Tweet
+            tweet_id = tweet['id']
+            tweet_text = tweet['text']
 
 
+            #save in Database
+            sql_query = "INSERT IGNORE  INTO tweets (tweet_id, tweet_text) VALUES (%s, %s)"
+            values = (tweet_id, tweet_text)
+
+            mycursor.execute(sql_query, values)
+            conn.commit()
+    finally:
+        f1.close()
+
+def handle_users(users):
+
+    try:
+        f1 = open("json_users_list.json", "a")
 
 
-# parse users save in Json file and save in a DB
-for user in users:
+        # parse users save in Json file and save in a DB
+        for user in users:
+            # save each tweet in Json File
 
-    # save each tweet in Json File
-    with open("json_users_list.json", "a") as f2:
-         f2.write(",\n")
-         json.dump(user, f2)
+            f1.write(",\n")
+            json.dump(user, f1)
 
-    # # parse Tweet
-    tweet_id = user['id']
-    tweet_text = user['username']
+            # # parse Tweet
+            tweet_id = user['id']
+            tweet_text = user['username']
 
-    # # save in Database
-    # sql_query = "INSERT IGNORE  INTO users (tweet_id, tweet_text) VALUES (%s, %s)"
-    # values = (tweet_id, tweet_text)
-    #
-    # mycursor.execute(sql_query, values)
-    # conn.commit()
+            # # save in Database
+            # sql_query = "INSERT IGNORE  INTO users (tweet_id, tweet_text) VALUES (%s, %s)"
+            # values = (tweet_id, tweet_text)
+            #
+            # mycursor.execute(sql_query, values)
+            # conn.commit()
+
+    finally:
+        f1.close()
 
 
 
+
+handle_tweets(tweets)
+handle_users(users)
 
 
 
@@ -165,46 +180,14 @@ while json_response['meta']['next_token']:
 
 
     # parse tweets save in Json file and save in a DB
-    for tweet in tweets:
-
-        # save each tweet in Json File
-        with open("json_tweets_list.json", "a") as f1:
-            f1.write(",\n")
-            json.dump(tweet, f1)
-
-        # parse Tweet
-        tweet_id = tweet['id']
-        tweet_text = tweet['text']
-
-        # save in Database
-        # sql_query = "INSERT IGNORE  INTO tweets (tweet_id, tweet_text) VALUES (%s, %s)"
-        # values = (tweet_id, tweet_text)
-        #
-        # mycursor.execute(sql_query, values)
-        # conn.commit()
-
+    handle_tweets(tweets)
 
     # parse users save in Json file and save in a DB
-    for user in users:
+    handle_users(users)
 
-        # save each tweet in Json File
-        with open("json_users_list.json", "a") as f2:
-            f2.write(",\n")
-            json.dump(user, f2)
 
-        # # parse Tweet
-        tweet_id = user['id']
-        tweet_text = user['username']
-        #
-        # # save in Database
-        # sql_query = "INSERT IGNORE  INTO users (tweet_id, tweet_text) VALUES (%s, %s)"
-        # values = (tweet_id, tweet_text)
-        #
-        # mycursor.execute(sql_query, values)
-        # conn.commit()
 
     page = page + 1
-
     print(f"page {page}")
 
     if page == 5:
