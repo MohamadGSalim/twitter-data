@@ -44,7 +44,7 @@ media_fields = []
 place_fields = []
 poll_fields = []
 sort_order = ""
-tweet_fields = "public_metrics,created_at,lang,source"
+tweet_fields = "public_metrics,created_at,lang,entities,referenced_tweets"
 user_fields = ['created_at,location,public_metrics,verified']
 next_token = None
 
