@@ -110,7 +110,38 @@ def handle_tweets(tweets):
             #parse Tweet
             tweet_id = tweet['id']
             tweet_text = tweet['text']
+            tweet_lang = tweet['lang']
+            tweet_created_at = tweet['created_at']
+            tweet_author_id = tweet['author_id']
 
+            #save in db
+
+
+            #public metrics
+            tweet_retweet_count = tweet['public_metrics']['retweet_count']
+            tweet_reply_count = tweet['public_metrics']['reply_count']
+            tweet_like_count = tweet['public_metrics']['like_count']
+            tweet_quote_count = tweet['public_metrics']['quote_count']
+            tweet_impression_count = tweet['public_metrics']['impression_count']
+
+            #save in db
+
+
+            # references
+            if 'referenced_tweets' in tweet:
+                for tweet_reference in tweet['referenced_tweets']:
+                    tweet_reference_type = tweet_reference['type']
+                    tweet_reference_id = tweet_reference['id']
+
+                    #save in db
+
+            # hashtags
+            if 'entities in tweet':
+                if 'hashtags' in tweet['entities']:
+                    for tweet_tags in tweet['entities']['hashtags']:
+                        tweet_hashtag = tweet_tags['tag']
+
+                        #save in db
 
             #save in Database
             sql_query = "INSERT IGNORE  INTO tweets (tweet_id, tweet_text) VALUES (%s, %s)"
@@ -134,9 +165,24 @@ def handle_users(users):
             f1.write(",\n")
             json.dump(user, f1)
 
-            # # parse Tweet
-            tweet_id = user['id']
-            tweet_text = user['username']
+            # parse user
+            user_id = user['id']
+            user_username = user['username']
+            user_name = user['name']
+            user_verified = user['verified']
+            user_created_at = user['created_at']
+            if 'location' in user:
+                user_location = user['location']
+
+
+            #user public metrics
+            user_followers_count = user['public_metrics']['followers_count']
+            user_following_count = user['public_metrics']['following_count']
+            user_tweet_count = user['public_metrics']['tweet_count']
+            user_listed_count = user['public_metrics']['listed_count']
+
+
+
 
             # # save in Database
             # sql_query = "INSERT IGNORE  INTO users (tweet_id, tweet_text) VALUES (%s, %s)"
