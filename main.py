@@ -21,7 +21,9 @@ print('Attempting connection to the database...')
 
 
 # Create bit.io connection client object b
-b = bitdotio.bitdotio('v2_3yjJ7_cqXNgxnaWgHipV7CEkxGyML')
+config = configparser.ConfigParser()
+bitio_token = config['bitio']['bitio_token']
+b = bitdotio.bitdotio(bitio_token)
 
 
 # The b object also provides access to a psycopg2 cursor for arbitrary SQL
@@ -42,7 +44,7 @@ bearer_token = config['twitter']['bearer_token']
 URL = "https://api.twitter.com/2/tweets/search/recent"
 
 #params
-query = "elon musk"
+query = "Recession"
 expansions = ['author_id']
 media_fields = []
 place_fields = []
@@ -57,7 +59,7 @@ PARAMS = {'tweet.fields': tweet_fields,
           'user.fields': user_fields,
           'expansions': expansions,
           'query': query,
-          'max_results': 10,
+          'max_results': 100,
           'next_token': next_token
           }
 
@@ -261,8 +263,8 @@ while json_response['meta']['next_token']:
     page = page + 1
     print(f"page {page}")
 
-    if page == 5:
-        exit(0)
+    # if page == 5:
+    #     exit(0)
 
 
 
