@@ -22,6 +22,7 @@ print('Attempting connection to the database...')
 
 # Create bit.io connection client object b
 config = configparser.ConfigParser()
+config.read('venv/config.ini')
 bitio_token = config['bitio']['bitio_token']
 b = bitdotio.bitdotio(bitio_token)
 
@@ -188,7 +189,7 @@ def handle_users(users):
             user_id = user['id']
             user_username = user['username']
             user_name = user['name']
-            user_verified = False
+            user_verified = user['verified']
             user_created_at = user['created_at']
             user_location = None
             if 'location' in user:
