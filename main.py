@@ -1,31 +1,35 @@
 import configparser
 import requests
 import mysql.connector
+import bitdotio
 import json
 from time import sleep
 
+print('Attempting connection to the database...')
 
-#connect to database
-conn = mysql.connector.connect(
-    host='localhost',
-    user='root',
-    password="root",
-    port='3306',
-    database='twitter-data'
-)
+#connect to local database
+# conn = mysql.connector.connect(
+#     host='db.bit.io',
+#     user='marcmneid',
+#     password="v2_3yjHY_7s2Uag3bLA3TW3sFTk2KCkh",
+#     port='5432',
+#     database='marcmneid/twitter-data'
+# )
+#
+# mycursor = conn.cursor()
 
+
+
+# Create bit.io connection client object b
+b = bitdotio.bitdotio('v2_3yjJ7_cqXNgxnaWgHipV7CEkxGyML')
+
+
+# The b object also provides access to a psycopg2 cursor for arbitrary SQL
+conn = b.get_connection('marcmneid/twitter-data')
 mycursor = conn.cursor()
 
 
-#create table
-# create_table = """CREATE TABLE tweets(
-#                         id long,
-#                         name varchar(2000)
-#
-#                         );"""
-#
-# mycursor.execute(create_table)
-# conn.commit()
+print("Connected to the database")
 
 
 #read twitter configs
@@ -111,7 +115,7 @@ def handle_tweets(tweets):
             tweet_created_at = tweet['created_at']
 
             # save in Database
-            sql_query = "INSERT IGNORE  INTO tweets (tweet_id, author_id,text,lang,created_at) VALUES (%s, %s, %s, %s, %s)"
+            sql_query = "INSERT INTO tweets (tweet_id, author_id,text,lang,created_at) VALUES (%s, %s, %s, %s, %s) ON CONFLICT DO NOTHING"
             values = (tweet_id, tweet_author_id, tweet_text, tweet_lang, tweet_created_at)
             mycursor.execute(sql_query, values)
 
@@ -126,7 +130,7 @@ def handle_tweets(tweets):
             tweet_impression_count = tweet['public_metrics']['impression_count']
 
             # save in Database
-            sql_query = "INSERT IGNORE  INTO tweet_public_metric (tweet_id, retweet_count, reply_count, like_count, quote_count, impression_count) VALUES (%s, %s, %s, %s, %s, %s)"
+            sql_query = "INSERT INTO tweet_public_metric (tweet_id, retweet_count, reply_count, like_count, quote_count, impression_count) VALUES (%s, %s, %s, %s, %s, %s) ON CONFLICT DO NOTHING"
             values = (tweet_id, tweet_retweet_count, tweet_reply_count, tweet_like_count, tweet_quote_count, tweet_impression_count)
             mycursor.execute(sql_query, values)
 
@@ -137,12 +141,12 @@ def handle_tweets(tweets):
                     tweet_reference_id = tweet_reference['id']
 
                     # save in Database
-                    sql_query = "INSERT IGNORE  INTO referenced_tweet (ref_tweet_id, type) VALUES (%s, %s)"
+                    sql_query = "INSERT INTO referenced_tweet (ref_tweet_id, type) VALUES (%s, %s) ON CONFLICT DO NOTHING"
                     values = (tweet_reference_id, tweet_reference_type)
                     mycursor.execute(sql_query, values)
 
                     # save in Database
-                    sql_query = "INSERT IGNORE  INTO tweet_references (tweet_id, ref_tweet_id) VALUES (%s, %s)"
+                    sql_query = "INSERT INTO tweet_references (tweet_id, ref_tweet_id) VALUES (%s, %s) ON CONFLICT DO NOTHING"
                     values = (tweet_id, tweet_reference_id)
                     mycursor.execute(sql_query, values)
 
@@ -152,12 +156,12 @@ def handle_tweets(tweets):
                     tweet_hashtag = tweet_tags['tag']
 
                     # save in Database
-                    sql_query = "INSERT IGNORE  INTO hashtags (tag) VALUES (%s)"
+                    sql_query = "INSERT INTO hashtags (tag) VALUES (%s) ON CONFLICT DO NOTHING"
                     values = (tweet_hashtag,)
                     mycursor.execute(sql_query, values)
 
                     # save in Database
-                    sql_query = "INSERT IGNORE  INTO tweet_tags (tweet_id, tag) VALUES (%s,%s)"
+                    sql_query = "INSERT INTO tweet_tags (tweet_id, tag) VALUES (%s,%s) ON CONFLICT DO NOTHING"
                     values = (tweet_id, tweet_hashtag)
                     mycursor.execute(sql_query, values)
 
@@ -165,7 +169,6 @@ def handle_tweets(tweets):
 
     finally:
         f1.close()
-
 
 def handle_users(users):
 
@@ -183,14 +186,14 @@ def handle_users(users):
             user_id = user['id']
             user_username = user['username']
             user_name = user['name']
-            user_verified = user['verified']
+            user_verified = False
             user_created_at = user['created_at']
             user_location = None
             if 'location' in user:
                 user_location = user['location']
 
             # save in Database
-            sql_query = "INSERT IGNORE  INTO users (user_id, username, name, verified, location, created_at) VALUES (%s, %s, %s, %s, %s, %s)"
+            sql_query = "INSERT INTO users (user_id, username, name, verified, location, created_at) VALUES (%s, %s, %s, %s, %s, %s) on CONFLICT DO NOTHING "
             values = (user_id, user_username, user_name, user_verified, user_location, user_created_at)
 
             mycursor.execute(sql_query, values)
@@ -202,7 +205,7 @@ def handle_users(users):
             user_listed_count = user['public_metrics']['listed_count']
 
             # save in Database
-            sql_query = "INSERT IGNORE  INTO user_public_metric (user_id, followers_count, following_count, tweet_count, listed_count) VALUES (%s, %s, %s, %s, %s)"
+            sql_query = "INSERT INTO user_public_metric (user_id, followers_count, following_count, tweet_count, listed_count) VALUES (%s, %s, %s, %s, %s) ON CONFLICT DO NOTHING"
             values = (user_id, user_followers_count, user_following_count, user_tweet_count, user_listed_count)
 
             mycursor.execute(sql_query, values)
@@ -221,6 +224,7 @@ handle_tweets(tweets_objects)
 
 page = 1
 print(f"page {page}")
+
 
 # #paginate through results
 while json_response['meta']['next_token']:
