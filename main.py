@@ -53,7 +53,7 @@ poll_fields = []
 sort_order = ""
 tweet_fields = "public_metrics,created_at,lang,entities,referenced_tweets"
 user_fields = ['created_at,location,public_metrics,verified']
-next_token = None
+next_token = 'b26v89c19zqg8o3fqk6zyuv8lt54uo7nw0gtakc8edda5'
 
 
 PARAMS = {'tweet.fields': tweet_fields,
