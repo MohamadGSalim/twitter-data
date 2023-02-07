@@ -45,7 +45,7 @@ bearer_token = config['twitter']['bearer_token']
 URL = "https://api.twitter.com/2/tweets/search/recent"
 
 #params
-query = "Recession"
+query = "\"economical depression\""
 expansions = ['author_id']
 media_fields = []
 place_fields = []
@@ -53,7 +53,7 @@ poll_fields = []
 sort_order = ""
 tweet_fields = "public_metrics,created_at,lang,entities,referenced_tweets"
 user_fields = ['created_at,location,public_metrics,verified']
-next_token = 'b26v89c19zqg8o3fqk6zyuv8lt54uo7nw0gtakc8edda5'
+next_token = None
 
 
 PARAMS = {'tweet.fields': tweet_fields,
