@@ -45,7 +45,7 @@ bearer_token = config['twitter']['bearer_token']
 URL = "https://api.twitter.com/2/tweets/search/recent"
 
 #params
-query = "recession"
+query = "\"stimulus checks\""
 expansions = ['author_id']
 media_fields = []
 place_fields = []
