@@ -45,7 +45,9 @@ bearer_token = config['twitter']['bearer_token']
 URL = "https://api.twitter.com/2/tweets/search/recent"
 
 #params
-query = "\"stimulus checks\""
+
+
+query = input("query: ")
 expansions = ['author_id']
 media_fields = []
 place_fields = []
@@ -76,20 +78,20 @@ print("URL: \n" + response.url + "\n")
 
 #the tweets
 tweets_objects = json_response['data']
-print("tweets list: ")
-print(tweets_objects)
-print()
+# print("tweets list: ")
+# print(tweets_objects)
+# print()
 
 #the users
 users_objects = json_response['includes']['users']
-print("users list: ")
-print(users_objects)
-print()
+# print("users list: ")
+# print(users_objects)
+# print()
 
 #meta data
-print("meta data: ")
-print(json_response['meta'])
-print()
+# print("meta data: ")
+# print(json_response['meta'])
+# print()
 
 
 #file for everything
