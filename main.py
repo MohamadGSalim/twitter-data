@@ -32,7 +32,7 @@ conn = b.get_connection('marcmneid/twitter-data')
 mycursor = conn.cursor()
 
 
-print("Connected to the database")
+print("Connected to the database successfully")
 
 
 #read twitter configs
