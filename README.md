@@ -1,5 +1,5 @@
 # twitter-data
-SOEN 363 assignment. Using Twitter API to download tweets and storing them in a remote database data.
+SOEN 363 assignment. Using Twitter API to download tweets about recession and storing them in a remote database data.
 The script is writter in python 3, therefore you need to install python 3 to run it.
 
 
