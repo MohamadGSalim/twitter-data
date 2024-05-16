@@ -1,10 +1,10 @@
-# twitter-data
-SOEN 363 assignment. Using Twitter API to download tweets about recession and storing them in a remote database data.
-The script is written in python 3, therefore you need to install python 3 to run it.
+# Twitter Data
+Using Twitter API to download tweets about recession and store them in a remote database.
+The script is written in Python 3, therefore you need to install Python 3 to run it.
 
 
 ## Prepare Dev Environment
-* install python 3
+* Install python 3
 * apt-get install python3-venv
 
 
